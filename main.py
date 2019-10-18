@@ -1,16 +1,19 @@
+# -*- coding: latin-1 -*-
+
 import gurobipy as gb
 import numpy as np
 from itertools import permutations
-#from utils import *
-#from igraph import *
+from utils import *
+from igraph import *
 
 def main():
 
-	instanceFileName = 'exemple'
+	instanceFileName = 'es10fst01.stp'
 	nTerminalNodes = 3
 
 	# Carregar estrutura do grafo
-	#g = read_graph(instanceFileName)
+	g = read_graph(instanceFileName)
+	print(g)
 	nEdges = 10
 	nVertices = 8
 	# ---
