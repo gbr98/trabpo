@@ -11,6 +11,8 @@ def main():
 
 	# Carregar estrutura do grafo
 	#g = read_graph(instanceFileName)
+	nEdges = 10
+	nVertices = 8
 	# ---
 
 	perm = list(permutations(np.linspace(1,nTerminalNodes-1,nTerminalNodes-1)))
@@ -43,6 +45,15 @@ def main():
 		# ---
 
 		model = gb.Model('delivery')
+
+		# Create variables
+		f = addVars((nEdges, len(S)), vtype=GRB.BINARY)
+		yhat, ybar = addVars((nVertices, len(S)), vtype=GRB.BINARY),addVars((nVertices, len(S)), vtype=GRB.BINARY)
+		w = addVars((nVertices, len(P)), vtype=GRB.BINARY)
+
+		# Set objective
+	    m.setObjective(, GRB.MINIMIZE)
+
 		'''
 		# Create variables
 	    x = m.addVar(vtype=GRB.BINARY, name="x")
