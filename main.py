@@ -94,8 +94,8 @@ def main():
 		model.setObjective(sum(W[edge]*f.sum(edge,'*') for edge in range(len(W))), gb.GRB.MINIMIZE)
 
 	    # Add Constrainsts
-		for i in range(nVertices):
-			for s in range(len(S)):
+		for i in range(1,nVertices+1):
+			for s in range(1,len(S)+1):
 				model.addConstr(f.sum(delta_p[i],s)-f.sum(delta_m[i],s) == yhat[i,s]-ybar[i,s]) #(1)
 		for s in range(len(S)):
 			if len(S[s]) >= 2:
