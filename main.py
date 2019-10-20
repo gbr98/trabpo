@@ -123,7 +123,7 @@ def main():
 			model.addConstr(ybar[terminalNodes[b-1],unitIndex] == 1) #(7)
 			for i in range(nVertices):
 				if i != terminalNodes[b-1]:
-					model.addConstr(ybar[i,unitIndex] == 1) #(8)
+					model.addConstr(ybar[i,unitIndex] == 0) #(8)
 
 		model.write('model.lp')
 		model.optimize()
