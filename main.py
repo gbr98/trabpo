@@ -104,9 +104,10 @@ def main():
 						for i in range(nVertices):
 							model.addConstr(w[i,p] == ybar[i,s]) #(2)
 		for p in range(len(P)):
-			for s in range(len(p)):
+			for s in P[p]:
+				index_s = S.index(s)
 				for i in range(nVertices):
-					model.addConstr(w[i,p] == yhat[i,s]) #(3)
+					model.addConstr(w[i,p] == yhat[i,index_s]) #(3)
 		for p in range(len(P)):
 			model.addConstr(w.sum('*',p) == 1) #(4)
 
