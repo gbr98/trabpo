@@ -125,9 +125,9 @@ def main():
 				if i != terminalNodes[b-1]:
 					model.addConstr(ybar[i,unitIndex] == 1) #(8)
 
-		model.write('model.mst')
 		model.optimize()
-
+		model.write('model.mst')
+		
 		'''
 		# Create variables
 	    x = m.addVar(vtype=GRB.BINARY, name="x")
