@@ -91,7 +91,7 @@ def main():
 		w = model.addVars((nVertices, len(P)), vtype=gb.GRB.BINARY)
 
 		# Set objective
-		model.setObjective(sum(W[edge]*f.sum(edge,'*') for edge in range(len(W))), GRB.MINIMIZE)
+		model.setObjective(sum(W[edge]*f.sum(edge,'*') for edge in range(len(W))), gb.GRB.MINIMIZE)
 
 	    # Add Constrainsts
 		for i in range(nVertices):
