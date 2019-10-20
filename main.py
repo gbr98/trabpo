@@ -87,8 +87,8 @@ def main():
 
 		# Create variables
 		f = model.addVars(nEdges, len(S), vtype=gb.GRB.BINARY)
-		yhat, ybar = model.addVars((nVertices, len(S)), vtype=gb.GRB.BINARY),model.addVars((nVertices, len(S)), vtype=gb.GRB.BINARY)
-		w = model.addVars((nVertices, len(P)), vtype=gb.GRB.BINARY)
+		yhat, ybar = model.addVars(nVertices, len(S), vtype=gb.GRB.BINARY),model.addVars(nVertices, len(S), vtype=gb.GRB.BINARY)
+		w = model.addVars(nVertices, len(P), vtype=gb.GRB.BINARY)
 
 		# Set objective
 		model.setObjective(sum(W[edge]*f.sum(edge,'*') for edge in range(len(W))), gb.GRB.MINIMIZE)
