@@ -48,6 +48,7 @@ def main():
 		posNode = int(np.floor(random()*remainingNodes.size))
 		terminalNodes.append(remainingNodes[posNode])
 		remainingNodes = np.delete(remainingNodes, posNode)
+	print(startNode, terminalNodes)
 	'''
 	print(nVertices, nEdges)
 	for i in range(nVertices):
