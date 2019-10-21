@@ -156,8 +156,8 @@ def main():
 	    m.optimize()
 		'''
 	print(bestValue)
-	f = bestSolution.getVarByName("f[0,0]")
-	print(float(f))
+	f = bestSolution.getVars()
+	print(f)
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
