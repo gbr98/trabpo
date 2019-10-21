@@ -173,7 +173,7 @@ def main():
 		'''
 	print(bestValue)
 	bestSolution.optimize()
-	file = open("report_"+str(instanceFileName)+".log", 'w')
+	file = open("report_"+str(instanceFileName).split('/')[1]+".log", 'w')
 	file.write("cost: "+str(bestValue))
 	file.write("S: "+str(bestS))
 	file.write("P: "+str(bestP))
@@ -185,6 +185,6 @@ def main():
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
-	model.write('best_model_'+str(instanceFileName)+'.lp')
+	model.write('best_model_'+str(instanceFileName).split('/')[1]+'.lp')
 		
 main()
