@@ -180,7 +180,7 @@ def main():
 	f = bestSolution.getVars()
 	for i in range(len(f)):
 		if f[i].x != 0:
-			file.write(str(f[i].varname)+str(f[i].x)+'\n')
+			file.write(str(f[i].varname)+": "+str(f[i].x)+'\n')
 	file.close()
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
