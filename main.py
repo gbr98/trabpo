@@ -115,7 +115,6 @@ def main():
 		for p in range(len(P)):
 			model.addConstr(w.sum('*',p) == 1) #(4)
 
-
 		model.addConstr(yhat[startNode,0] == 1) #(5)
 
 		for i in range(nVertices):
@@ -124,6 +123,7 @@ def main():
 
 		for b in base:
 			unitIndex = S.index([b])
+			print(unitIndex)
 			model.addConstr(ybar[terminalNodes[b-1],unitIndex] == 1) #(7)
 			for i in range(nVertices):
 				if i != terminalNodes[b-1]:
