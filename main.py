@@ -76,6 +76,7 @@ def main():
 
 	bestSolution = None
 	bestValue = np.inf
+	bestS, bestP = [], []
 
 	for i in range(len(perm)):
 		# Para cada família laminar, deve-se gerar e resolver
@@ -150,6 +151,8 @@ def main():
 		if model.objVal < bestValue:
 			bestValue = model.objVal
 			bestSolution = model.copy()
+			bestS = S.copy()
+			bestP = P.copy()
 		'''
 		# Create variables
 	    x = m.addVar(vtype=GRB.BINARY, name="x")
@@ -170,13 +173,18 @@ def main():
 		'''
 	print(bestValue)
 	bestSolution.optimize()
+	file = open("report_"+str(instanceFileName)+".log", 'w')
+	file.write("cost: "+str(bestValue))
+	file.write("S: "+str(bestS))
+	file.write("P: "+str(bestP))
 	f = bestSolution.getVars()
-	#for i in range(len(f)):
-		#if f[i].x != 0:
-			#print(f[i].varname,f[i].x)
+	for i in range(len(f)):
+		if f[i].x != 0:
+			file.write(f[i].varname,f[i].x)
+	file.close()
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
-	model.write('model.lp')
+	model.write('best_model_'+str(instanceFileName)'.lp')
 		
 main()
