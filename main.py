@@ -20,14 +20,14 @@ def main():
 	A = []
 	for i in range(nEdges):
 		edge = g.es[i].tuple 
-		print(edge)
+		#print(edge)
 		#g.add_edge(source=edge[1], target=edge[0], weight=g.es[i]['weight'])
 	#nEdges = len(g.es)
 	W = list(g.es['weight'])
-	print(W)
+	#print(W)
 	ex = list(g.es.select(_source=1))
-	for e in ex:
-		print(e.tuple)
+	#for e in ex:
+	#	print(e.tuple)
 
 	delta_p = []
 	delta_m = []
@@ -37,7 +37,7 @@ def main():
 	for i in range(nEdges):
 		delta_p[g.es[i].source-1].append(i)
 		delta_m[g.es[i].target-1].append(i)
-	print(delta_m, delta_p)
+	#print(delta_m, delta_p)
 	
 	# Selecionar terminais
 	'''
@@ -99,7 +99,7 @@ def main():
 					S.append(s[cut:])
 					P.append((s[:cut],s[cut:]))
 			sliced = swap.copy()
-			#print(sliced)
+			print(sliced)
 		print(S,P)
 		# ---
 
@@ -170,9 +170,9 @@ def main():
 	print(bestValue)
 	bestSolution.optimize()
 	f = bestSolution.getVars()
-	for i in range(len(f)):
-		if f[i].x != 0:
-			print(f[i].varname,f[i].x)
+	#for i in range(len(f)):
+		#if f[i].x != 0:
+			#print(f[i].varname,f[i].x)
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
