@@ -89,12 +89,13 @@ def main():
 		for j in range(0,nTerminalNodes-1):
 			cutPoint = int(perm[i][j])
 			#print(cutPoint)
-			swap = []
+			swap = sliced.copy()
 			for s in sliced:
 				if cutPoint in s and len(s) > 1:
 					cut = s.index(cutPoint)+1
 					swap.append(s[:cut])
 					swap.append(s[cut:])
+					swap.remove(s)
 					S.append(s[:cut])
 					S.append(s[cut:])
 					P.append((s[:cut],s[cut:]))
