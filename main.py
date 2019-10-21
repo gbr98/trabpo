@@ -13,13 +13,17 @@ def main():
 	nTerminalNodes = 3
 
 	# Carregar estrutura do grafo
-	g = read_graph(instanceFileName)
+	g = read_graph(instanceFileName).as_directed()
 	nEdges = len(g.es)
+	print(nEdges)
 	nVertices = len(g.vs)
 	A = []
-	W = list(g.es['weight'])
 	for i in range(nEdges):
-		print(g.es[i].tuple)
+		edge = g.es[i].tuple 
+		print(edge)
+		g.add_edge(edge[1], edge[0], weight=g.es[i]['weight'])
+	nEdges = len(g.es)
+	W = list(g.es['weight'])
 	print(W)
 	ex = list(g.es.select(_source=1))
 	for e in ex:
