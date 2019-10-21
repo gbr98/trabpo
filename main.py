@@ -174,13 +174,13 @@ def main():
 	print(bestValue)
 	bestSolution.optimize()
 	file = open("report_"+str(instanceFileName).split('/')[1]+".log", 'w')
-	file.write("cost: "+str(bestValue))
-	file.write("S: "+str(bestS))
-	file.write("P: "+str(bestP))
+	file.write("cost: "+str(bestValue)+'\n')
+	file.write("S: "+str(bestS)+'\n')
+	file.write("P: "+str(bestP)+'\n')
 	f = bestSolution.getVars()
 	for i in range(len(f)):
 		if f[i].x != 0:
-			file.write(str(f[i].varname)+str(f[i].x))
+			file.write(str(f[i].varname)+str(f[i].x)+'\n')
 	file.close()
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
