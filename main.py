@@ -40,10 +40,10 @@ def main():
 	print(delta_m, delta_p)
 	
 	# Selecionar terminais
-	remainingNodes = np.linspace(1,nVertices,nVertices)
+	remainingNodes = np.linspace(0,nVertices-1,nVertices)
 	terminalNodes = []
 	startNode = remainingNodes[int(np.floor(random()*nTerminalNodes))]
-	remainingNodes = np.delete(remainingNodes, startNode-1)
+	remainingNodes = np.delete(remainingNodes, startNode)
 	for i in range(nTerminalNodes):
 		posNode = int(np.floor(random()*remainingNodes.size))
 		terminalNodes.append(remainingNodes[posNode])
@@ -119,10 +119,10 @@ def main():
 		for p in range(len(P)):
 			model.addConstr(w.sum('*',p) == 1) #(4)
 
-		model.addConstr(yhat[startNode-1,0] == 1) #(5)
+		model.addConstr(yhat[startNode,0] == 1) #(5)
 
 		for i in range(nVertices):
-			if i+1 != startNode:
+			if i != startNode:
 				model.addConstr(yhat[i,0] == 0) #(6)
 
 		for b in base:
