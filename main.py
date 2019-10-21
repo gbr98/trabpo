@@ -185,6 +185,6 @@ def main():
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
-	model.write('best_model_'+str(instanceFileName)'.lp')
+	model.write('best_model_'+str(instanceFileName)+'.lp')
 		
 main()
