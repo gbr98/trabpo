@@ -1,4 +1,4 @@
-echo "Iniciando novo log" > log
+echo "Iniciando novo arquivo log" > log
 for y in instances/*.stp;
 do
   echo "Teste: Instancia $y" >> log
