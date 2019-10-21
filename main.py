@@ -21,8 +21,8 @@ def main():
 	for i in range(nEdges):
 		edge = g.es[i].tuple 
 		print(edge)
-		g.add_edge(edge[1], edge[0], weight=g.es[i]['weight'])
-	nEdges = len(g.es)
+		#g.add_edge(source=edge[1], target=edge[0], weight=g.es[i]['weight'])
+	#nEdges = len(g.es)
 	W = list(g.es['weight'])
 	print(W)
 	ex = list(g.es.select(_source=1))
