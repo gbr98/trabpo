@@ -35,8 +35,8 @@ def main():
 		delta_p.append([])
 		delta_m.append([])
 	for i in range(nEdges):
-		delta_p[g.es[i].source-1].append(i)
-		delta_m[g.es[i].target-1].append(i)
+		delta_p[g.es[i].source].append(i)
+		delta_m[g.es[i].target].append(i)
 	
 	# Selecionar terminais
 	remainingNodes = np.linspace(1,nVertices,nVertices)
@@ -123,7 +123,6 @@ def main():
 
 		for b in base:
 			unitIndex = S.index([b])
-			print(unitIndex)
 			model.addConstr(ybar[terminalNodes[b-1],unitIndex] == 1) #(7)
 			for i in range(nVertices):
 				if i != terminalNodes[b-1]:
