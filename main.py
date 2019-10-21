@@ -35,8 +35,9 @@ def main():
 		delta_p.append([])
 		delta_m.append([])
 	for i in range(nEdges):
-		delta_p[g.es[i].source].append(i)
-		delta_m[g.es[i].target].append(i)
+		delta_p[g.es[i].source-1].append(i)
+		delta_m[g.es[i].target-1].append(i)
+	print(delta_m, delta_p)
 	
 	# Selecionar terminais
 	remainingNodes = np.linspace(1,nVertices,nVertices)
@@ -47,7 +48,6 @@ def main():
 		posNode = int(np.floor(random()*remainingNodes.size))
 		terminalNodes.append(remainingNodes[posNode])
 		remainingNodes = np.delete(remainingNodes, posNode)
-	print(startNode, terminalNodes)
 	'''
 	print(nVertices, nEdges)
 	for i in range(nVertices):
@@ -90,9 +90,9 @@ def main():
 		model = gb.Model('delivery')
 
 		# Create variables
-		f = model.addVars(nEdges, len(S), vtype=gb.GRB.BINARY)
-		yhat, ybar = model.addVars(nVertices, len(S), vtype=gb.GRB.BINARY),model.addVars(nVertices, len(S), vtype=gb.GRB.BINARY)
-		w = model.addVars(nVertices, len(P), vtype=gb.GRB.BINARY)
+		f = model.addVars(nEdges, len(S), vtype=gb.GRB.BINARY, name="f")
+		yhat, ybar = model.addVars(nVertices, len(S), vtype=gb.GRB.BINARY, name="yhat"),model.addVars(nVertices, len(S), vtype=gb.GRB.BINARY, name="ybar")
+		w = model.addVars(nVertices, len(P), vtype=gb.GRB.BINARY, name="w")
 
 		# Set objective
 		model.setObjective(sum(W[edge]*f.sum(edge,'*') for edge in range(len(W))), gb.GRB.MINIMIZE)
