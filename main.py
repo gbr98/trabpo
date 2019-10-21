@@ -116,7 +116,7 @@ def main():
 		for p in range(len(P)):
 			model.addConstr(w.sum('*',p) == 1) #(4)
 
-		model.addConstr(yhat[startNode,0] == 1) #(5)
+		model.addConstr(yhat[startNode-1,0] == 1) #(5)
 
 		for i in range(nVertices):
 			if i+1 != startNode:
