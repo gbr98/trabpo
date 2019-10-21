@@ -157,9 +157,10 @@ def main():
 		'''
 	print(bestValue)
 	f = bestSolution.getVarByName("f")
-	for i in range(nEdges):
-		for j in range(len(S)):
-			print(f[i,j].X)
+	print(f)
+	#for i in range(nEdges):
+	#	for j in range(len(S)):
+	#		print(f[i,j].X)
 	model.write('model.lp')
 		
 main()
