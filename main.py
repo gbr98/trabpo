@@ -173,6 +173,13 @@ def main():
 		'''
 	print(bestValue)
 	bestSolution.optimize()
+	optW = []
+	for i in range(len(bestP)):
+		for j in range(nVertices):
+			if bestSolution.getVarByName("w["+str(j)+","+str(i)+"]") == 1:
+				optW.append(j)
+				break
+	print(optW)
 	file = open("report_"+str(instanceFileName).split('/')[1]+".log", 'w')
 	file.write("cost: "+str(bestValue)+'\n')
 	file.write("S: "+str(bestS)+'\n')
@@ -186,5 +193,5 @@ def main():
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
 	model.write('best_model_'+str(instanceFileName).split('/')[1]+'.lp')
-		
+
 main()
