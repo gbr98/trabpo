@@ -157,7 +157,7 @@ def main():
 		'''
 	print(bestValue)
 	for v in bestSolution.getVars():
-		print(v.x)
+		print(v.X)
 	model.write('model.lp')
 		
 main()
