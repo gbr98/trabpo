@@ -158,10 +158,8 @@ def main():
 	print(bestValue)
 	bestSolution.optimize()
 	f = bestSolution.getVars()
-	print(dir(f[0]))
-	print(f[0].lb)
-	print(f[0].ub)
-	print(f[0].x)
+	for i in range(len(f)):
+		print(f[i].x)
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
