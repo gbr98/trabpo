@@ -2,6 +2,7 @@
 
 import gurobipy as gb
 import numpy as np
+import sys
 from itertools import permutations
 from utils import *
 from igraph import *
@@ -9,8 +10,7 @@ from random import random
 
 def main():
 
-	instanceFileName = 'es10fst01.stp'
-	nTerminalNodes = 3
+	instanceFileName = str(sys.argv[1])#'es10fst01.stp'
 
 	# Carregar estrutura do grafo
 	g = read_graph(instanceFileName).as_directed()
@@ -40,6 +40,7 @@ def main():
 	print(delta_m, delta_p)
 	
 	# Selecionar terminais
+	'''
 	remainingNodes = np.linspace(0,nVertices-1,nVertices)
 	terminalNodes = []
 	startNode = remainingNodes[int(np.floor(random()*nTerminalNodes))]
@@ -48,6 +49,17 @@ def main():
 		posNode = int(np.floor(random()*remainingNodes.size))
 		terminalNodes.append(remainingNodes[posNode])
 		remainingNodes = np.delete(remainingNodes, posNode)
+	print(startNode, terminalNodes)
+	'''
+	terminalNodes = []
+	startNode = None
+	for i in range(nVertices):
+		if g.vs[i]["terminal"] == True:
+			if startNode == None:
+				startNode = i
+			else:
+				terminalNodes.append(i)
+	nTerminalNodes = len(terminalNodes)
 	print(startNode, terminalNodes)
 	'''
 	print(nVertices, nEdges)
