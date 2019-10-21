@@ -157,7 +157,8 @@ def main():
 		'''
 	print(bestValue)
 	f = bestSolution.getVars()
-	print(f[0].X)
+	print(dir(f[0]))
+	print(f[0].x)
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
