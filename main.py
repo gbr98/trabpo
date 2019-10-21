@@ -159,7 +159,8 @@ def main():
 	bestSolution.optimize()
 	f = bestSolution.getVars()
 	for i in range(len(f)):
-		print(f[i].varname,f[i].x)
+		if f[i].x != 0:
+			print(f[i].varname,f[i].x)
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
