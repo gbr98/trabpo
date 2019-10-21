@@ -62,6 +62,9 @@ def main():
 	perm = list(permutations(np.linspace(1,nTerminalNodes-1,nTerminalNodes-1)))
 	base = list(np.linspace(1,nTerminalNodes,nTerminalNodes).astype(np.int))
 
+	bestSolution = None
+	bestValue = np.inf
+
 	for i in range(len(perm)):
 		# Para cada família laminar, deve-se gerar e resolver
 		# um modelo de programação linear
@@ -129,9 +132,11 @@ def main():
 				if i != terminalNodes[b-1]:
 					model.addConstr(ybar[i,unitIndex] == 0) #(8)
 
-		model.write('model.lp')
 		model.optimize()
 
+		if model.objVal < bestValue:
+			bestValue = model.objVal
+			bestSolution = model.copy()
 		'''
 		# Create variables
 	    x = m.addVar(vtype=GRB.BINARY, name="x")
@@ -150,5 +155,7 @@ def main():
 	    # Optimize model
 	    m.optimize()
 		'''
+	print(bestValue)
+	model.write('model.lp')
 		
 main()
