@@ -157,7 +157,7 @@ def main():
 		'''
 	print(bestValue)
 	f = bestSolution.getVarByName("f[0,0]")
-	print(f.getAttr(gb.GRB.Attr.X))
+	print(float(f))
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
