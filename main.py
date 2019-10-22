@@ -35,8 +35,8 @@ def main():
 		delta_p.append([])
 		delta_m.append([])
 	for i in range(nEdges):
-		delta_p[g.es[i].source-1].append(i)
-		delta_m[g.es[i].target-1].append(i)
+		delta_p[g.es[i].source].append(i)
+		delta_m[g.es[i].target].append(i)
 	#print(delta_m, delta_p)
 	
 	# Selecionar terminais
@@ -146,6 +146,7 @@ def main():
 				if i != terminalNodes[b-1]:
 					model.addConstr(ybar[i,unitIndex] == 0) #(8)
 
+		model.presolve()
 		model.optimize()
 
 		if model.objVal < bestValue:
@@ -172,6 +173,7 @@ def main():
 	    m.optimize()
 		'''
 	print(bestValue)
+	bestSolution.presolve()
 	bestSolution.optimize()
 	optW = []
 	for i in range(len(bestP)):
@@ -192,21 +194,20 @@ def main():
 			for i in range(len(bestP)):
 				if list(bestP[i][0]+bestP[i][1]) == list(s[0]):
 					#print(g.shortest_paths_dijkstra(s[1],optW[i]))
-					totalCost += g.as_undirected().shortest_paths_dijkstra(s[1],optW[i])[0][0]
+					totalCost += g.shortest_paths_dijkstra(s[1],optW[i],W)[0][0]
 					print(s[1],optW[i])
 					print(totalCost)
 					newActS.remove(s)
 					if len(bestP[i][0]) > 1:
 						newActS.append([bestP[i][0], optW[i]])
 					else:
-						totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][0][0]-1])[0][0]
+						totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][0][0]-1],W)[0][0]
 						print(optW[i],terminalNodes[bestP[i][0][0]-1])
 						print(totalCost)
 					if len(bestP[i][1]) > 1:
 						newActS.append([bestP[i][1], optW[i]])
 					else:
-						#print(g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][1]]))
-						totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][1][0]-1])[0][0]
+						totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][1][0]-1],W)[0][0]
 						print(optW[i],terminalNodes[bestP[i][1][0]-1])
 						print(totalCost)
 		actS = newActS.copy()
@@ -215,10 +216,10 @@ def main():
 	#Plotar o gráfico
 	#Atenção: não recomendado para grafos grandes
 	#g = read_graph("./ES10FST/es10fst01.stp")
-	layout = g.layout("fr")
-	color_dict = {False: "white", True: "grey"}
-	g.vs["color"] = [color_dict[terminal] for terminal in g.vs["terminal"]]
-	plot(g, layout = layout)
+	#layout = g.layout("fr")
+	#color_dict = {False: "white", True: "grey"}
+	#g.vs["color"] = [color_dict[terminal] for terminal in g.vs["terminal"]]
+	#plot(g, layout = layout)
 
 	### Printing ###
 	file = open("report_"+str(instanceFileName).split('/')[1]+".log", 'w')
