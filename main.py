@@ -24,7 +24,7 @@ def main():
 		#g.add_edge(source=edge[1], target=edge[0], weight=g.es[i]['weight'])
 	#nEdges = len(g.es)
 	W = list(g.es['weight'])
-	#print(W)
+	print(W)
 	ex = list(g.es.select(_source=1))
 	#for e in ex:
 	#	print(e.tuple)
@@ -176,10 +176,51 @@ def main():
 	optW = []
 	for i in range(len(bestP)):
 		for j in range(nVertices):
-			if bestSolution.getVarByName("w["+str(j)+","+str(i)+"]") == 1:
+			#print(bestSolution.getVarByName("w["+str(j)+","+str(i)+"]"))
+			if bestSolution.getVarByName("w["+str(j)+","+str(i)+"]").x == 1:
 				optW.append(j)
 				break
+	print(bestP)
 	print(optW)
+	print("S="+str(startNode)+" :: T="+str(terminalNodes))
+	totalCost = 0
+	actS = [[base, startNode]]
+	while len(actS) > 0:
+		print(actS)
+		newActS = actS.copy()
+		for s in actS:
+			for i in range(len(bestP)):
+				if list(bestP[i][0]+bestP[i][1]) == list(s[0]):
+					#print(g.shortest_paths_dijkstra(s[1],optW[i]))
+					totalCost += g.as_undirected().shortest_paths_dijkstra(s[1],optW[i])[0][0]
+					print(s[1],optW[i])
+					print(totalCost)
+					newActS.remove(s)
+					if len(bestP[i][0]) > 1:
+						newActS.append([bestP[i][0], optW[i]])
+					else:
+						totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][0][0]-1])[0][0]
+						print(optW[i],terminalNodes[bestP[i][0][0]-1])
+						print(totalCost)
+					if len(bestP[i][1]) > 1:
+						newActS.append([bestP[i][1], optW[i]])
+					else:
+						#print(g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][1]]))
+						totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][1][0]-1])[0][0]
+						print(optW[i],terminalNodes[bestP[i][1][0]-1])
+						print(totalCost)
+		actS = newActS.copy()
+	print("Cost:"+str(totalCost))
+
+	#Plotar o gráfico
+	#Atenção: não recomendado para grafos grandes
+	#g = read_graph("./ES10FST/es10fst01.stp")
+	layout = g.layout("fr")
+	color_dict = {False: "white", True: "grey"}
+	g.vs["color"] = [color_dict[terminal] for terminal in g.vs["terminal"]]
+	plot(g, layout = layout)
+
+	### Printing ###
 	file = open("report_"+str(instanceFileName).split('/')[1]+".log", 'w')
 	file.write("cost: "+str(bestValue)+'\n')
 	file.write("S: "+str(bestS)+'\n')
