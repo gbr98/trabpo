@@ -2,11 +2,12 @@
 
 import gurobipy as gb
 import numpy as np
+import scipy as cp
 import sys
 from itertools import permutations
+from itertools import combinations
 from utils import *
 from igraph import *
-from random import random
 
 def main():
 
@@ -71,18 +72,54 @@ def main():
 	'''
 	# ---
 
-	perm = list(permutations(np.linspace(1,nTerminalNodes-1,nTerminalNodes-1)))
+	#perm = list(permutations(np.linspace(1,nTerminalNodes-1,nTerminalNodes-1)))
 	base = list(np.linspace(1,nTerminalNodes,nTerminalNodes).astype(np.int))
+
+	def generateLb(base, part, staged, b):
+		print(base, part, staged, b)
+		S = []
+		P = []
+		if len(staged) == 0:
+			return [base], [part]
+		for s in staged:
+			if len(s) > 1:
+				for i in range(1,len(s)):
+					comb = combinations(s, i)
+					for c in comb:
+						cp_base = base.copy()
+						cp_staged = staged.copy()
+						cp_staged.remove(s)
+						cp_s = s.copy()
+						for k in c:
+							cp_s.remove(k)
+						cp_base.append(list(c))
+						cp_base.append(cp_s)
+						if len(c) > 1:
+							cp_staged.append(list(c))
+						if len(cp_s) > 1:
+							cp_staged.append(cp_s)
+						cp_part = part.copy()
+						cp_part.append((list(c), cp_s))
+						S_i, P_i = generateLb(cp_base, cp_part, cp_staged, b)
+						for k in range(len(S_i)):
+							S.append(S_i[k])
+							P.append(P_i[k])
+		return S, P
+
+
+	F, G = generateLb([base], [], [base], len(base))
 
 	bestSolution = None
 	bestValue = np.inf
 	bestS, bestP = [], []
 
-	for i in range(len(perm)):
+	for i in range(len(F)):
+		print("it:"+str(i))
 		# Para cada família laminar, deve-se gerar e resolver
 		# um modelo de programação linear
 
 		# Toma família laminar
+		'''
 		P = []
 		S = [base]
 		sliced = [base]
@@ -102,7 +139,10 @@ def main():
 					P.append((s[:cut],s[cut:]))
 			sliced = swap.copy()
 			print(sliced)
-		print(S,P)
+		'''
+		S = F[i]
+		P = G[i]
+		print(S,P) 
 		# ---
 
 		model = gb.Model('delivery')
@@ -149,11 +189,60 @@ def main():
 		model.presolve()
 		model.optimize()
 
+		bestS = S.copy()
+		bestP = P.copy()
+		optW = []
+		for i in range(len(bestP)):
+			for j in range(nVertices):
+				#print(bestSolution.getVarByName("w["+str(j)+","+str(i)+"]"))
+				if model.dddddgetVarByName("w["+str(j)+","+str(i)+"]").x == 1:
+					optW.append(j)
+					break
+		print(bestP)
+		print(optW)
+		print("S="+str(startNode)+" :: T="+str(terminalNodes))
+		totalCost = 0
+		actS = [[base, startNode]]
+		while len(actS) > 0:
+			print(actS)
+			newActS = actS.copy()
+			for s in actS:
+				for i in range(len(bestP)):
+					print(bestP[i], newActS)
+					a = list(bestP[i][0]+bestP[i][1])
+					b = list(s[0])
+					a.sort()
+					b.sort()
+					if a == b:
+						#print(g.shortest_paths_dijkstra(s[1],optW[i]))
+						totalCost += g.shortest_paths_dijkstra(s[1],optW[i],W)[0][0]
+						print(s[1],optW[i])
+						print(totalCost)
+						newActS.remove(s)
+						if len(bestP[i][0]) > 1:
+							newActS.append([bestP[i][0], optW[i]])
+						else:
+							totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][0][0]-1],W)[0][0]
+							print(optW[i],terminalNodes[bestP[i][0][0]-1])
+							print(totalCost)
+						if len(bestP[i][1]) > 1:
+							newActS.append([bestP[i][1], optW[i]])
+						else:
+							totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][1][0]-1],W)[0][0]
+							print(optW[i],terminalNodes[bestP[i][1][0]-1])
+							print(totalCost)
+						break
+			actS = newActS.copy()
+		print("Cost:"+str(totalCost))
+		if totalCost < bestValue:
+			bestValue = totalCost
+		'''
 		if model.objVal < bestValue:
 			bestValue = model.objVal
 			bestSolution = model.copy()
 			bestS = S.copy()
 			bestP = P.copy()
+		'''
 		'''
 		# Create variables
 	    x = m.addVar(vtype=GRB.BINARY, name="x")
@@ -173,6 +262,7 @@ def main():
 	    m.optimize()
 		'''
 	print(bestValue)
+	input()
 	bestSolution.presolve()
 	bestSolution.optimize()
 	optW = []
@@ -192,7 +282,12 @@ def main():
 		newActS = actS.copy()
 		for s in actS:
 			for i in range(len(bestP)):
-				if list(bestP[i][0]+bestP[i][1]) == list(s[0]):
+				print(bestP[i], newActS)
+				a = list(bestP[i][0]+bestP[i][1])
+				b = list(s[0])
+				a.sort()
+				b.sort()
+				if a == b:
 					#print(g.shortest_paths_dijkstra(s[1],optW[i]))
 					totalCost += g.shortest_paths_dijkstra(s[1],optW[i],W)[0][0]
 					print(s[1],optW[i])
@@ -210,6 +305,7 @@ def main():
 						totalCost += g.shortest_paths_dijkstra(optW[i],terminalNodes[bestP[i][1][0]-1],W)[0][0]
 						print(optW[i],terminalNodes[bestP[i][1][0]-1])
 						print(totalCost)
+					break
 		actS = newActS.copy()
 	print("Cost:"+str(totalCost))
 
