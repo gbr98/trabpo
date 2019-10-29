@@ -162,7 +162,11 @@ def main():
 		for s in range(len(S)):
 			if len(S[s]) >= 2:
 				for p in range(len(P)):
-					if list(P[p][0]+P[p][1]) == list(S[s]):
+					aux1 = list(P[p][0]+P[p][1])
+					aux2 = list(S[s])
+					aux1.sort()
+					aux2.sort()
+					if aux1 == aux2:
 						for i in range(nVertices):
 							model.addConstr(w[i,p] == ybar[i,s]) #(2)
 		for p in range(len(P)):
@@ -180,7 +184,7 @@ def main():
 				model.addConstr(yhat[i,0] == 0) #(6)
 
 		for b in base:
-			unitIndex = S.index([b])
+			unitIndex = S.index(list([b]))
 			model.addConstr(ybar[terminalNodes[b-1],unitIndex] == 1) #(7)
 			for i in range(nVertices):
 				if i != terminalNodes[b-1]:
@@ -189,15 +193,23 @@ def main():
 		model.presolve()
 		model.optimize()
 
-		bestS = S.copy()
-		bestP = P.copy()
+		#bestS = S.copy()
+		#bestP = P.copy()
 		optW = []
-		for i in range(len(bestP)):
+		for i in range(len(P)):
 			for j in range(nVertices):
 				#print(bestSolution.getVarByName("w["+str(j)+","+str(i)+"]"))
-				if model.dddddgetVarByName("w["+str(j)+","+str(i)+"]").x == 1:
+				if model.getVarByName("w["+str(j)+","+str(i)+"]").x == 1:
 					optW.append(j)
 					break
+		totalCost = 0
+		for i in range(len(S)):
+			for j in range(nEdges):
+				if model.getVarByName("f["+str(j)+","+str(i)+"]").x > 0:
+					totalCost += W[j]
+					print(j,i,"(",g.es[j].source,g.es[j].target,")")
+
+		'''
 		print(bestP)
 		print(optW)
 		print("S="+str(startNode)+" :: T="+str(terminalNodes))
@@ -233,9 +245,13 @@ def main():
 							print(totalCost)
 						break
 			actS = newActS.copy()
+		'''
 		print("Cost:"+str(totalCost))
 		if totalCost < bestValue:
 			bestValue = totalCost
+			bestS = S.copy()
+			bestP = P.copy()
+			bestSolution = model.copy()
 		'''
 		if model.objVal < bestValue:
 			bestValue = model.objVal
@@ -262,7 +278,7 @@ def main():
 	    m.optimize()
 		'''
 	print(bestValue)
-	input()
+	print(bestS, bestP)
 	bestSolution.presolve()
 	bestSolution.optimize()
 	optW = []
@@ -275,6 +291,15 @@ def main():
 	print(bestP)
 	print(optW)
 	print("S="+str(startNode)+" :: T="+str(terminalNodes))
+	
+	totalCost = 0
+	for i in range(len(S)):
+		for j in range(nEdges):
+			if bestSolution.getVarByName("f["+str(j)+","+str(i)+"]").x > 0:
+				totalCost += W[j]
+				print(j,i,"(",g.es[j].source,g.es[j].target,")")
+	print(totalCost)
+
 	totalCost = 0
 	actS = [[base, startNode]]
 	while len(actS) > 0:
