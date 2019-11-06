@@ -1,15 +1,20 @@
 # -*- coding: latin-1 -*-
 
+import time
+import csv
 import gurobipy as gb
 import numpy as np
 import scipy as cp
 import sys
 from itertools import permutations
 from itertools import combinations
+from datetime import datetime
 from utils import *
 from igraph import *
 
 def main():
+
+	start_time = time.time()
 
 	instanceFileName = str(sys.argv[1])#'es10fst01.stp'
 
@@ -348,13 +353,32 @@ def main():
 	file.write("S: "+str(bestS)+'\n')
 	file.write("P: "+str(bestP)+'\n')
 	f = bestSolution.getVars()
+	finalSolution = ""
 	for i in range(len(f)):
 		if f[i].x != 0:
+			finalSolution+=str(f[i].varname)+": "+str(f[i].x)+'\t'
 			file.write(str(f[i].varname)+": "+str(f[i].x)+'\n')
 	file.close()
 	#for i in range(nEdges):
 	#	for j in range(len(S)):
 	#		print(f[i,j].X)
 	model.write('best_model_'+str(instanceFileName).split('/')[1]+'.lp')
+
+	if(str(instanceFileName=="/instances/c01.stp")):
+		bestKnownSolutionCost = 85
+	elif(str(instanceFileName=="/instances/c06.stp")):
+		bestKnownSolutionCost = 55
+	elif(str(instanceFileName=="/instances/c11.stp")):
+		bestKnownSolutionCost = 32
+	elif(str(instanceFileName=="/instances/c16.stp")):
+		bestKnownSolutionCost = 11
+	elif(str(instanceFileName=="/instances/d01.stp")):
+		bestKnownSolutionCost = 106
+		
+	total_time = time.time()-start_time
+
+	with open('data.csv','a') as data:
+		data.write(str(datetime.now())+"\t"+str(instanceFileName)+"\t"+"nVertices = "+str(nVertices)+"\t"+"nEdges = "+str(nEdges)+"\t"+"nTerminalNodes = "+str(nTerminalNodes+1)+"\t"+"Execution time: "+str(total_time)+"s"+"\t"+"Solution: "+str(finalSolution)+"\t"+"Cost: "+str(bestValue)+"\t"+"OptSolution: "+str(bestKnownSolutionCost)+"\n\n\n\n")
+
 
 main()
